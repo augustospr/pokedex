@@ -1,3 +1,11 @@
 body{
   background-color: gainsboro;
 }
+
+.nomePokemon {
+  text-transform: capitalize;
+}
+
+.tipos {
+  text-transform: capitalize;
+}

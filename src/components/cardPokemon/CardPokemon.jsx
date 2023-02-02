@@ -5,25 +5,32 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
-export default function CardPokemon({ nome }) {
+export default function CardPokemon({ nome, imagem, tipo }) {
+
+    const manipulaTipos = () => {
+        if (tipo[1]) {
+           return tipo[0].type.name + " | " + tipo[1].type.name;
+        }
+        else {
+           return tipo[0].type.name;
+        }
+    }
+
     return (
         <Card sx={{ maxWidth: 345 }}>
             <CardMedia
                 sx={{ height: 140 }}
-                image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png"
-                title="green iguana"
+                image={imagem}
+                title={nome}
             />
             <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography className='nomePokemon' gutterBottom variant="h5" component="div">
                     {nome}
                 </Typography>
             </CardContent>
             <CardActions>
-                <Typography gutterBottom variant="h8" component="div">
-                    tipo01
-                </Typography>
-                <Typography gutterBottom variant="h8" component="div">
-                    tipo02
+                <Typography className='tipos' gutterBottom variant="h8" component="div">
+                    {manipulaTipos()}
                 </Typography>
             </CardActions>
         </Card>

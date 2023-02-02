@@ -9,50 +9,47 @@ export default function Home() {
 
   const [api, setApi] = useState([]);
 
+  const filtraPokemon = (nome) => {
+    const filtrado = [];
+    console.log(nome);
+    
+  }
+
+
   useEffect(() => {
-    // getApi();
     getApiData();
   }, []);
-
-  // const getApi = async () => {
-  //   try {
-  //     await fetch(`https://pokeapi.co/api/v2/pokemon?limit=50&offset=0/`)
-  //       .then((res) => res.json())
-  //       .then((res) => setApi(res.results))
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
 
   const getApiData = async () => {
     try {
       const endpoints = [];
-      for (var i = 1; i < 50; i++) {
+      for (var i = 1; i < 152; i++) {
         endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
       }
-      const resposta = Promise.all(endpoints.map((endpoint) => fetch(endpoint))).then((res) => setApi(res));
+      const resposta = await Promise.all(endpoints.map((endpoint) => fetch(endpoint)))
+        .then((res) => Promise.all(res.map(async r => r.json())))
+        .then((res) => {
+          console.log(res)
+          setApi(res)
+        });
       console.log(resposta);
     } catch (err) {
       console.log(err);
     }
   }
 
-  console.log(api);
-
   return (
     <>
       <Container>
         <Grid container spacing={2}>
           <Cabecalho />
-          <PesquisaPokemon />
+          <PesquisaPokemon filtraPokemon={filtraPokemon} />
 
-
-          {api.map((item, key) => (
-            <Grid item key={key}>
-              <CardPokemon nome={item.name} />
+          {api.map((item, index) => (
+            <Grid item key={index} xs={12} sm={4} md={2}>
+              <CardPokemon nome={item.name} imagem={item.sprites.front_default} tipo={item.types}/>
             </Grid>
           ))}
-
 
         </Grid>
       </Container>
