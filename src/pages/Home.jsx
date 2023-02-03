@@ -9,12 +9,23 @@ export default function Home() {
 
   const [api, setApi] = useState([]);
 
+  const [filtrado, setFiltrado] = useState("");
+
   const filtraPokemon = (nome) => {
-    const filtrado = [];
-    console.log(nome);
-    
+    setFiltrado(nome);
   }
 
+  // const filtraPokemon = (nome) => {
+  //   const pokemonFiltrado = [];
+  //   if (nome === "") {
+  //   return (getApiData());
+  // }
+  //   for (var i in api) {
+  //     if (api[i].name.includes(nome)) {
+  //       pokemonFiltrado.push(api[i]);
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     getApiData();
@@ -29,10 +40,8 @@ export default function Home() {
       const resposta = await Promise.all(endpoints.map((endpoint) => fetch(endpoint)))
         .then((res) => Promise.all(res.map(async r => r.json())))
         .then((res) => {
-          console.log(res)
           setApi(res)
         });
-      console.log(resposta);
     } catch (err) {
       console.log(err);
     }
@@ -45,9 +54,9 @@ export default function Home() {
           <Cabecalho />
           <PesquisaPokemon filtraPokemon={filtraPokemon} />
 
-          {api.map((item, index) => (
+          {api.filter(pokemon => pokemon.name.includes(filtrado)).map((item, index) => (
             <Grid item key={index} xs={12} sm={4} md={2}>
-              <CardPokemon nome={item.name} imagem={item.sprites.front_default} tipo={item.types}/>
+              <CardPokemon nome={item.name} imagem={item.sprites.front_default} tipo={item.types} />
             </Grid>
           ))}
 
