@@ -9,10 +9,10 @@ export default function CardPokemon({ nome, imagem, tipo }) {
 
     const manipulaTipos = () => {
         if (tipo[1]) {
-           return tipo[0].type.name + " | " + tipo[1].type.name;
+            return tipo[0].type.name + " | " + tipo[1].type.name;
         }
         else {
-           return tipo[0].type.name;
+            return tipo[0].type.name;
         }
     }
 

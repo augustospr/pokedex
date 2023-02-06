@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import CardPokemon from "../components/cardPokemon/CardPokemon";
 import Cabecalho from "../components/cabecalho/Cabecalho";
 import PesquisaPokemon from "../components/pesquisaPokemon/PesquisaPokemon";
+import Paginacao from "../components/paginacao/Paginacao";
 import { Container, Grid } from "@mui/material";
 import { useState } from "react";
 
@@ -31,20 +32,35 @@ export default function Home() {
     getApiData();
   }, []);
 
+  const cardPorPagina = 24;
+
   const getApiData = async () => {
     try {
       const endpoints = [];
       for (var i = 1; i < 152; i++) {
         endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
       }
-      const resposta = await Promise.all(endpoints.map((endpoint) => fetch(endpoint)))
+      await Promise.all(endpoints.map((endpoint) => fetch(endpoint)))
         .then((res) => Promise.all(res.map(async r => r.json())))
         .then((res) => {
-          setApi(res)
+          setApi(res);
+          setTotalPaginas(Math.ceil(i / cardPorPagina));
         });
     } catch (err) {
       console.log(err);
     }
+  }
+
+  const [paginas, setPaginas] = useState(0);
+  const [totalPaginas, setTotalPaginas] = useState(0);
+
+
+  const leftClickHandler = () => {
+    console.log("Volta");
+  }
+
+  const rightClickHandler = () => {
+    console.log("Avança");
   }
 
   return (
@@ -53,6 +69,15 @@ export default function Home() {
         <Grid container spacing={2}>
           <Cabecalho />
           <PesquisaPokemon filtraPokemon={filtraPokemon} />
+
+          <Grid item xs={12} textAlign="center">
+            <Paginacao 
+            paginas={paginas + 1}
+            totalPaginas={totalPaginas} 
+            leftClick={leftClickHandler}
+            rightClick={rightClickHandler}
+            />
+          </Grid>
 
           {api.filter(pokemon => pokemon.name.includes(filtrado)).map((item, index) => (
             <Grid item key={index} xs={12} sm={4} md={2}>
