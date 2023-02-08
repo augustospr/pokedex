@@ -1,10 +1,12 @@
-export default function Paginacao({ paginas, totalPaginas, leftClick, rightClick }) {
+import { Button } from "@mui/material";
+
+export default function Paginacao({ melancia }) {
     
     return (
         <div className="paginacao">
-            <button onClick={leftClick}>⇦</button>
-            <p> Página {paginas} de {totalPaginas} </p>
-            <button onClick={rightClick}>⇨</button>
+            <Button onClick={melancia} variant="contained" color="success" sx={{ width: 250 }}>
+                Ver mais +
+            </Button>
         </div>
     )
 }

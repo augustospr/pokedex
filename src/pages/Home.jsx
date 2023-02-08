@@ -16,6 +16,10 @@ export default function Home() {
     setFiltrado(nome);
   }
 
+  const limit = 24;
+
+  const [offset, setOffset] = useState(0);
+
   // const filtraPokemon = (nome) => {
   //   const pokemonFiltrado = [];
   //   if (nome === "") {
@@ -30,21 +34,18 @@ export default function Home() {
 
   useEffect(() => {
     getApiData();
-  }, []);
-
-  const cardPorPagina = 24;
+  }, [offset]);
 
   const getApiData = async () => {
     try {
       const endpoints = [];
-      for (var i = 1; i < 152; i++) {
+      for (var i = offset + 1; i <= limit + offset; i++) {
         endpoints.push(`https://pokeapi.co/api/v2/pokemon/${i}/`);
       }
       await Promise.all(endpoints.map((endpoint) => fetch(endpoint)))
         .then((res) => Promise.all(res.map(async r => r.json())))
         .then((res) => {
-          setApi(res);
-          setTotalPaginas(Math.ceil(i / cardPorPagina));
+          setApi([...api, ...res]);
         });
     } catch (err) {
       console.log(err);
@@ -52,39 +53,24 @@ export default function Home() {
   }
 
   const [paginas, setPaginas] = useState(0);
-  const [totalPaginas, setTotalPaginas] = useState(0);
 
-
-  const leftClickHandler = () => {
-    console.log("Volta");
-  }
-
-  const rightClickHandler = () => {
-    console.log("Avança");
-  }
 
   return (
     <>
-      <Container>
+      <Container sx={{ paddingBottom: 5 }}>
         <Grid container spacing={2}>
           <Cabecalho />
           <PesquisaPokemon filtraPokemon={filtraPokemon} />
-
-          <Grid item xs={12} textAlign="center">
-            <Paginacao 
-            paginas={paginas + 1}
-            totalPaginas={totalPaginas} 
-            leftClick={leftClickHandler}
-            rightClick={rightClickHandler}
-            />
-          </Grid>
 
           {api.filter(pokemon => pokemon.name.includes(filtrado)).map((item, index) => (
             <Grid item key={index} xs={12} sm={4} md={2}>
               <CardPokemon nome={item.name} imagem={item.sprites.front_default} tipo={item.types} />
             </Grid>
-          ))}
 
+          ))}
+          <Grid item xs={12} textAlign="center">
+            <Paginacao melancia={() => setOffset(offset + limit)} />
+          </Grid>
         </Grid>
       </Container>
 
