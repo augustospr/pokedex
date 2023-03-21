@@ -20,18 +20,6 @@ export default function Home() {
 
   const [offset, setOffset] = useState(0);
 
-  // const filtraPokemon = (nome) => {
-  //   const pokemonFiltrado = [];
-  //   if (nome === "") {
-  //   return (getApiData());
-  // }
-  //   for (var i in api) {
-  //     if (api[i].name.includes(nome)) {
-  //       pokemonFiltrado.push(api[i]);
-  //     }
-  //   }
-  // }
-
   useEffect(() => {
     getApiData();
   }, [offset]);
@@ -52,9 +40,6 @@ export default function Home() {
     }
   }
 
-  const [paginas, setPaginas] = useState(0);
-
-
   return (
     <>
       <Container sx={{ paddingBottom: 5 }}>
@@ -69,7 +54,7 @@ export default function Home() {
 
           ))}
           <Grid item xs={12} textAlign="center">
-            <Paginacao melancia={() => setOffset(offset + limit)} />
+            <Paginacao addMore={() => setOffset(offset + limit)} />
           </Grid>
         </Grid>
       </Container>
