@@ -21,10 +21,10 @@ export default function Home() {
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
-    getApiData();
+    getApiInfo();
   }, [offset]);
 
-  const getApiData = async () => {
+  const getApiInfo = async () => {
     try {
       const endpoints = [];
       for (var i = offset + 1; i <= limit + offset; i++) {
